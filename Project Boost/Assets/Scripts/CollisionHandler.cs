@@ -29,7 +29,8 @@ public class CollisionHandler : MonoBehaviour
         // to do - add SFX upon crash
         // to do - add particle effect upon crash
         GetComponent<Movement>().enabled = false;
-        Invoke("ReloadLevel", levelDelayTime);
+        GetComponent<AudioSource>().enabled = false;
+        Invoke(nameof(ReloadLevel), levelDelayTime);
     }
 
     private void StartSuccessSequence()
@@ -37,7 +38,8 @@ public class CollisionHandler : MonoBehaviour
         // to do - add SFX upon crash
         // to do - add particle effect upon crash
         GetComponent<Movement>().enabled = false;
-        Invoke("NextLevel", levelDelayTime);
+        GetComponent<AudioSource>().enabled = false;
+        Invoke(nameof(NextLevel), levelDelayTime);
     }
     
     private void ReloadLevel()
