@@ -31,7 +31,7 @@ public class Movement : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             // Vector3 to vector składający się z 3 liczb, oraz posiada oba: kierunek i magnitude
-            _rb.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
+            _rb.AddRelativeForce(Vector3.up * (mainThrust * Time.deltaTime));
             if (!_audioSource.isPlaying)
             { 
                 _audioSource.Play();
@@ -59,7 +59,7 @@ public class Movement : MonoBehaviour
     private void ApplyRotation(float rotationThisFrame)
     {
         _rb.freezeRotation = true;  // Freezing rotation so we can manually rotate
-        transform.Rotate(Vector3.forward * rotationThisFrame * Time.deltaTime);
+        transform.Rotate(Vector3.forward * (rotationThisFrame * Time.deltaTime));
         _rb.freezeRotation = false; // Unfreezing rotation so the physics system can take over
     }
 }
