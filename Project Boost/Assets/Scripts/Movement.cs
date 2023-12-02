@@ -8,8 +8,11 @@ public class Movement : MonoBehaviour
     // Tworzymy Rigidbody o nazwie _rb
     private Rigidbody _rb;
     private AudioSource _audioSource;
+    [SerializeField] private AudioClip engineSound;
     [SerializeField] private float mainThrust = 1000f;
     [SerializeField] private float rotationThrust = 1f;
+    
+    [SerializeField] private ParticleSystem engineParticle;
     
     // Start is called before the first frame update
     void Start()
@@ -34,12 +37,18 @@ public class Movement : MonoBehaviour
             _rb.AddRelativeForce(Vector3.up * (mainThrust * Time.deltaTime));
             if (!_audioSource.isPlaying)
             { 
-                _audioSource.Play();
+                _audioSource.PlayOneShot(engineSound);
+            }
+
+            if (!engineParticle.isPlaying)
+            {
+                engineParticle.Play();
             }
         }
         else
         {
             _audioSource.Stop();
+            engineParticle.Stop();
         }
     }
 

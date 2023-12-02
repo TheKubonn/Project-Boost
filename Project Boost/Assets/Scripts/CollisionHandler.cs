@@ -7,38 +7,57 @@ using UnityEngine.SceneManagement;
 public class CollisionHandler : MonoBehaviour
 {
     [SerializeField] private float levelDelayTime = 2f;
-    
+    [SerializeField] private AudioClip successSound;
+    [SerializeField] private AudioClip crashSound;
+
+    [SerializeField] private ParticleSystem successParticle;
+    [SerializeField] private ParticleSystem crashParticle;
+
+    private AudioSource _audioSource;
+
+    private bool _isTransitioning = false;
+
+    private void Start()
+    {
+        _audioSource = GetComponent<AudioSource>();
+    }
+
     private void OnCollisionEnter(Collision other)
     {
-        switch (other.gameObject.tag)
+        if (!_isTransitioning)
         {
-            case "Friendly":
-                Debug.Log("This thing is friendly");
-                break;
-            case "Finish":
-                StartSuccessSequence();
-                break;
-            default:
-                StartCrashSequence();
-                break;
+            switch (other.gameObject.tag)
+            {
+                case "Friendly":
+                    Debug.Log("This thing is friendly");
+                    break;
+                case "Finish":
+                    StartSuccessSequence();
+                    break;
+                default:
+                    StartCrashSequence();
+                    break;
+            }
         }
     }
 
     private void StartCrashSequence()
     {
-        // to do - add SFX upon crash
-        // to do - add particle effect upon crash
+        _isTransitioning = true;
+        _audioSource.Stop();
+        _audioSource.PlayOneShot(crashSound);
+        crashParticle.Play();
         GetComponent<Movement>().enabled = false;
-        GetComponent<AudioSource>().enabled = false;
         Invoke(nameof(ReloadLevel), levelDelayTime);
     }
 
     private void StartSuccessSequence()
     {
-        // to do - add SFX upon crash
-        // to do - add particle effect upon crash
+        _isTransitioning = true;
+        _audioSource.Stop();
+        _audioSource.PlayOneShot(successSound);
+        successParticle.Play();
         GetComponent<Movement>().enabled = false;
-        GetComponent<AudioSource>().enabled = false;
         Invoke(nameof(NextLevel), levelDelayTime);
     }
     
