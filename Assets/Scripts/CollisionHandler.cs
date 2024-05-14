@@ -14,7 +14,7 @@ public class CollisionHandler : MonoBehaviour
     private AudioSource _audioSource;
     private DebugCheats _debugCheats;
 
-    bool isTransitioning = false;
+    private bool _isTransitioning = false;
 
     private void Start()
     {
@@ -24,7 +24,7 @@ public class CollisionHandler : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (isTransitioning || _debugCheats.collisionDisabled) { return; }
+        if (_isTransitioning || _debugCheats.collisionDisabled) { return; }
         
         switch (other.gameObject.tag)
         {
@@ -41,7 +41,7 @@ public class CollisionHandler : MonoBehaviour
     }
     private void StartCrashSequence()
     {
-        isTransitioning = true;
+        _isTransitioning = true;
         _audioSource.Stop();
         _audioSource.PlayOneShot(crashAudio);
         crashParticles.Play();
@@ -51,7 +51,7 @@ public class CollisionHandler : MonoBehaviour
 
     private void StartFinishSequence()
     {
-        isTransitioning = true;
+        _isTransitioning = true;
         _audioSource.Stop();
         _audioSource.PlayOneShot(successAudio);
         successParticles.Play();

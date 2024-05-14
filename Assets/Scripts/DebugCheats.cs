@@ -1,5 +1,6 @@
 using UnityEngine;
-using UnityEngine.UIElements;
+
+#if (UNITY_EDITOR || DEVELOPMENT_BUILD)
 
 public class DebugCheats : MonoBehaviour
 {
@@ -37,3 +38,4 @@ public class DebugCheats : MonoBehaviour
         }
     }
 }
+#endif
