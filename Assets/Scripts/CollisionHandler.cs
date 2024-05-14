@@ -12,17 +12,19 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] private ParticleSystem crashParticles;
     
     private AudioSource _audioSource;
+    private DebugCheats _debugCheats;
 
     bool isTransitioning = false;
 
     private void Start()
     {
         _audioSource = GetComponent<AudioSource>();
+        _debugCheats = GetComponent<DebugCheats>();
     }
 
     private void OnCollisionEnter(Collision other)
     {
-        if (isTransitioning) { return; }
+        if (isTransitioning || _debugCheats.collisionDisabled) { return; }
         
         switch (other.gameObject.tag)
         {
@@ -63,7 +65,7 @@ public class CollisionHandler : MonoBehaviour
         SceneManager.LoadScene(currentSceneIndex);
     }
 
-    private void LoadNextLevel()
+    public void LoadNextLevel()
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         int nextSceneIndex = currentSceneIndex + 1;
