@@ -10,6 +10,11 @@ public class Movement : MonoBehaviour
     [SerializeField] private float mainThrust = 100f; // Creating a float for the speed of rocket to go up
     [SerializeField] private float rotationThrust = 1f; // Creating a float for the speed of rocket rotating
     [SerializeField] private AudioClip mainEngine;
+    [SerializeField] private ParticleSystem mainEngineParticles;
+    [SerializeField] private ParticleSystem rightUpParticles;
+    [SerializeField] private ParticleSystem rightBottomParticles;
+    [SerializeField] private ParticleSystem leftUpParticles;
+    [SerializeField] private ParticleSystem leftBottomParticles;
     
     private Rigidbody _rigidbody; // Creating a reference to our rigidbody on the rocket
     private AudioSource _audioSource; // Creating a reference to our audiosource
@@ -30,29 +35,77 @@ public class Movement : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space)) // If we are pressing and holding space key
         {
-            // We're adding a releative force which is Vector3.up (0,1,0) and multiply by our float and deltatime
-            _rigidbody.AddRelativeForce(Vector3.up * (mainThrust * Time.deltaTime));
-            if (!_audioSource.isPlaying)
-            {
-                _audioSource.PlayOneShot(mainEngine);
-            }
+            StartThrusting();
         }
         else
         {
-            _audioSource.Stop();
+            StopThrusting();
         }
     }
-
+    
     void ProcessRotation()
     {
         if (Input.GetKey(KeyCode.A)) // If we are pressing and holding A key
         {
-            ApplyRotation(rotationThrust);
+            RotateLeft();
         }
         else if (Input.GetKey(KeyCode.D)) // If we are pressing and holding D key
         {
-            ApplyRotation(-rotationThrust);
+            RotateRight();
         }
+        else
+        {
+            StopRotating();
+        }
+    }
+    
+    private void StartThrusting()
+    {
+        // We're adding a releative force which is Vector3.up (0,1,0) and multiply by our float and deltatime
+        _rigidbody.AddRelativeForce(Vector3.up * (mainThrust * Time.deltaTime));
+        if (!_audioSource.isPlaying)
+        {
+            _audioSource.PlayOneShot(mainEngine);
+        }
+
+        if (!mainEngineParticles.isPlaying)
+        {
+            mainEngineParticles.Play();
+        }
+    }
+    
+    private void StopThrusting()
+    {
+        _audioSource.Stop();
+        mainEngineParticles.Stop();
+    }
+    
+    private void RotateLeft()
+    {
+        ApplyRotation(rotationThrust);
+        if (!rightUpParticles.isPlaying && !rightBottomParticles.isPlaying)
+        {
+            rightUpParticles.Play();
+            rightBottomParticles.Play();
+        }
+    }
+    
+    private void RotateRight()
+    {
+        ApplyRotation(-rotationThrust);
+        if (!leftUpParticles.isPlaying && !leftBottomParticles.isPlaying)
+        {
+            leftUpParticles.Play();
+            leftBottomParticles.Play();
+        }
+    }
+
+    private void StopRotating()
+    {
+        rightUpParticles.Stop();
+        rightBottomParticles.Stop();
+        leftUpParticles.Stop();
+        leftBottomParticles.Stop();
     }
 
     private void ApplyRotation(float rotationThisFrame)
