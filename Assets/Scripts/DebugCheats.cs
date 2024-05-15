@@ -1,13 +1,11 @@
 using UnityEngine;
 
-#if (UNITY_EDITOR || DEVELOPMENT_BUILD)
-
 public class DebugCheats : MonoBehaviour
 {
+    public bool collisionDisabled = false;
+#if (UNITY_EDITOR || DEVELOPMENT_BUILD)
     private CollisionHandler _collisionHandler;
     private Collider _collider;
-    
-    public bool collisionDisabled = false;
     
     private void Start()
     {
@@ -37,5 +35,6 @@ public class DebugCheats : MonoBehaviour
             _collider.enabled = !_collider.enabled;
         }
     }
-}
 #endif
+}
+
